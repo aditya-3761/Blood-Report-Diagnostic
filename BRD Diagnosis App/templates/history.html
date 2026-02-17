@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User History</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+      background: linear-gradient(135deg, #71b7e6, #9b59b6);
+    }
+
+    .container {
+      max-width: 1300px;
+      width: 100%;
+      background-color: #fff;
+      padding: 25px 30px;
+      border-radius: 5px;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+      text-align: center;
+    }
+
+    .title {
+      font-size: 25px;
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+
+    .top-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      color: white;
+      display: inline-block;
+    }
+
+    .download-btn {
+      background: #28a745;
+    }
+
+    .download-btn:hover {
+      background: #218838;
+    }
+
+    .delete-btn {
+      background: #dc3545;
+      font-size: 12px;
+      padding: 4px 8px;
+    }
+
+    .delete-btn:hover {
+      background: #c82333;
+    }
+
+    .back-btn {
+      color: #9b59b6;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .back-btn:hover {
+      text-decoration: underline;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 13px;
+    }
+
+    th, td {
+      border: 1px solid #dddddd;
+      text-align: center;
+      padding: 8px;
+    }
+
+    th {
+      background-color: #9b59b6;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    tr:hover {
+      background-color: #f2f2f2;
+    }
+
+    @media(max-width: 768px) {
+      table {
+        font-size: 11px;
+      }
+      
+      th, td {
+        padding: 4px;
+      }
+
+      .btn {
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <div class="title">Your Test History</div>
+
+    <div class="top-actions">
+      <a href="{{ url_for('download_history') }}" class="btn download-btn">
+        Download PDF
+      </a>
+
+      <a href="{{ url_for('afterlogin') }}">Back to Detection</a>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>WBC</th>
+          <th>RBC</th>
+          <th>HGB</th>
+          <th>PLT</th>
+          <th>NEUT</th>
+          <th>LYMPH</th>
+          <th>MONO</th>
+          <th>EO</th>
+          <th>BASO</th>
+          <th>Disease</th>
+          <th>Date & Time</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% if history %}
+          {% for record in history %}
+          <tr>
+            <td>{{ record.get('WBC') }}</td>
+            <td>{{ record.get('RBC') }}</td>
+            <td>{{ record.get('HGB') }}</td>
+            <td>{{ record.get('PLT') }}</td>
+            <td>{{ record.get('NEUT') }}</td>
+            <td>{{ record.get('LYMPH') }}</td>
+            <td>{{ record.get('MONO') }}</td>
+            <td>{{ record.get('EO') }}</td>
+            <td>{{ record.get('BASO') }}</td>
+            <td>{{ record.get('disease_name') }}</td>
+            <td>{{ record.get('created_at') }}</td>
+            <td>
+              <a href="{{ url_for('delete_history', record_id=record.id) }}"
+                 class="btn delete-btn"
+                 onclick="return confirm('Are you sure you want to delete this record?')">
+                 Delete
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="12">No test history available.</td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+
+  </div>
+</body>
+</html>

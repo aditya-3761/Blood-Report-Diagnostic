@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - Blood Report Detection</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+      background: linear-gradient(135deg, #71b7e6, #9b59b6);
+    }
+
+    .container {
+      max-width: 700px;
+      width: 100%;
+      background-color: #fff;
+      padding: 25px 30px;
+      border-radius: 5px;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .container .title {
+      font-size: 25px;
+      font-weight: 500;
+      text-align: center;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .container .title::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      height: 3px;
+      width: 50px;
+      border-radius: 5px;
+      background: linear-gradient(135deg, #71b7e6, #9b59b6);
+    }
+
+    .user-details {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .input-box {
+      margin-bottom: 15px;
+      width: calc(100% / 2 - 20px);
+    }
+
+    .input-box span {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 5px;
+    }
+
+    .input-box input {
+      height: 45px;
+      width: 100%;
+      outline: none;
+      font-size: 16px;
+      border-radius: 5px;
+      padding-left: 15px;
+      border: 1px solid #ccc;
+      border-bottom-width: 2px;
+      transition: 0.3s;
+    }
+
+    .input-box input:focus {
+      border-color: #9b59b6;
+    }
+
+    .gender-details {
+      margin-top: 10px;
+    }
+
+    .gender-title {
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    .category {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      width: 60%;
+    }
+
+    .button {
+      height: 45px;
+      margin: 25px 0;
+    }
+
+    .button input {
+      height: 100%;
+      width: 100%;
+      border-radius: 5px;
+      border: none;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 500;
+      cursor: pointer;
+      background: linear-gradient(135deg, #71b7e6, #9b59b6);
+      transition: 0.3s;
+    }
+
+    .button input:hover {
+      background: linear-gradient(-135deg, #71b7e6, #9b59b6);
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .login-link a {
+      color: #9b59b6;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+
+    .alert {
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      text-align: center;
+    }
+
+    .alert-danger {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 13px;
+      display: none;
+    }
+
+    @media(max-width: 584px) {
+      .input-box { width: 100%; }
+      .category { width: 100%; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="title">Registration</div>
+
+    <form action="{{ url_for('register') }}" method="POST" onsubmit="return validateRegister()">
+
+      <div class="user-details">
+
+        <div class="input-box">
+          <span>Username</span>
+          <input type="text" id="username" name="username" required>
+          <span class="error-message" id="usernameError"></span>
+        </div>
+
+        <div class="input-box">
+          <span>Email</span>
+          <input type="email" id="email" name="email" required>
+          <span class="error-message" id="emailError"></span>
+        </div>
+
+        <div class="input-box">
+          <span>Password</span>
+          <input type="password" id="password" name="password" required>
+          <span class="error-message" id="passwordError"></span>
+        </div>
+
+        <div class="input-box">
+          <span>Confirm Password</span>
+          <input type="password" id="confirm_password" name="confirm_password" required>
+          <span class="error-message" id="confirmPasswordError"></span>
+        </div>
+
+        <div class="input-box">
+          <span>Age</span>
+          <input type="number" id="age" name="age" min="1" max="120" required>
+          <span class="error-message" id="ageError"></span>
+        </div>
+
+      </div>
+
+      <div class="gender-details">
+        <span class="gender-title">Gender</span>
+
+        <div class="category">
+          <label>
+            <input type="radio" name="gender" value="Male" required> Male
+          </label>
+
+          <label>
+            <input type="radio" name="gender" value="Female" required> Female
+          </label>
+        </div>
+
+        <span class="error-message" id="genderError"></span>
+      </div>
+
+      <div class="button">
+        <input type="submit" value="Register" onclick="return validateRegister()">
+      </div>
+
+    </form>
+
+    <div class="login-link">
+      Already have an account? 
+    <a href="{{ url_for('login') }}">Login here</a>
+    </div>
+
+  </div>
+
+<script>
+function validateRegister() {
+
+  let isValid = true;
+
+  const username = document.getElementById('username').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value.trim();
+  const confirmPassword = document.getElementById('confirm_password').value.trim();
+  const age = document.getElementById('age').value.trim();
+  const gender = document.querySelector('input[name="gender"]:checked');
+
+  const usernameError = document.getElementById('usernameError');
+  const emailError = document.getElementById('emailError');
+  const passwordError = document.getElementById('passwordError');
+  const confirmPasswordError = document.getElementById('confirmPasswordError');
+  const ageError = document.getElementById('ageError');
+  const genderError = document.getElementById('genderError');
+
+  document.querySelectorAll('.error-message').forEach(e => e.style.display = 'none');
+
+  if (username.length < 3) {
+    usernameError.textContent = "Username must be at least 3 characters";
+    usernameError.style.display = "block";
+    isValid = false;
+  }
+
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailPattern.test(email)) {
+    emailError.textContent = "Enter valid email";
+    emailError.style.display = "block";
+    isValid = false;
+  }
+
+  if (password.length < 6) {
+    passwordError.textContent = "Password must be at least 6 characters";
+    passwordError.style.display = "block";
+    isValid = false;
+  }
+
+  if (password !== confirmPassword) {
+    confirmPasswordError.textContent = "Passwords do not match";
+    confirmPasswordError.style.display = "block";
+    isValid = false;
+  }
+
+  if (age < 1 || age > 120) {
+    ageError.textContent = "Enter valid age";
+    ageError.style.display = "block";
+    isValid = false;
+  }
+
+  if (!gender) {
+    genderError.textContent = "Please select gender";
+    genderError.style.display = "block";
+    isValid = false;
+  }
+
+  return isValid;
+}
+</script>
+
+</body>
+</html>

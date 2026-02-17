@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Blood Report Detection</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #71b7e6, #9b59b6);
+    }
+
+    .container {
+      max-width: 500px;
+      width: 100%;
+      background: #fff;
+      padding: 25px 30px;
+      border-radius: 5px;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+    }
+
+    .title {
+      font-size: 25px;
+      font-weight: 500;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .input-box {
+      margin-bottom: 15px;
+    }
+
+    .input-box span {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 5px;
+    }
+
+    .input-box input {
+      width: 100%;
+      height: 45px;
+      padding-left: 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    .button input {
+      width: 100%;
+      height: 45px;
+      border: none;
+      border-radius: 5px;
+      background: linear-gradient(135deg, #71b7e6, #9b59b6);
+      color: #fff;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .alert {
+      text-align: center;
+      margin-bottom: 15px;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    .alert-danger {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .alert-success {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .register-link {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .register-link a {
+      color: #9b59b6;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 13px;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  <div class="title">Blood Report Detection - Login</div>
+
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endif %}
+
+  {% if success %}
+    <div class="alert alert-success">{{ success }}</div>
+  {% endif %}
+
+  <!-- ✅ CORRECT ACTION -->
+  <form action="{{ url_for('login') }}" method="POST" onsubmit="return validateLogin()">
+
+    <div class="input-box">
+      <span>Username</span>
+      <input type="text" id="username" name="username" required>
+      <div class="error-message" id="usernameError"></div>
+    </div>
+
+    <div class="input-box">
+      <span>Password</span>
+      <input type="password" id="password" name="password" required>
+      <div class="error-message" id="passwordError"></div>
+    </div>
+
+    <div class="button">
+      <!-- ✅ NO <a> TAG -->
+      <input type="submit" value="Login">
+    </div>
+
+  </form>
+
+  <div class="register-link">
+    Don’t have an account?
+    <a href="{{ url_for('register') }}">Register here</a>
+  </div>
+
+</div>
+
+<script>
+function validateLogin() {
+  let valid = true;
+
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  document.getElementById("usernameError").style.display = "none";
+  document.getElementById("passwordError").style.display = "none";
+
+  if (username.length < 3) {
+    document.getElementById("usernameError").innerText =
+      "Username must be at least 3 characters";
+    document.getElementById("usernameError").style.display = "block";
+    valid = false;
+  }
+
+  if (password.length < 6) {
+    document.getElementById("passwordError").innerText =
+      "Password must be at least 6 characters";
+    document.getElementById("passwordError").style.display = "block";
+    valid = false;
+  }
+
+  return valid;
+}
+</script>
+
+</body>
+</html>
