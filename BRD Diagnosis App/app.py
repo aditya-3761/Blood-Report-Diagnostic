@@ -78,6 +78,10 @@ def index():
         return redirect(url_for("afterlogin"))
     return redirect(url_for("login"))
 
+@app.route("/")
+def home():
+    return "Flask app deployed successfully!"
+
 # ===============================
 # Register
 # ===============================
