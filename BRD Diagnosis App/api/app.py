@@ -11,7 +11,13 @@ from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 from reportlab.lib import colors
 import io
 
-app = Flask(__name__)
+from flask import Flask
+
+app = Flask(
+    __name__,
+    template_folder="templates",
+    static_folder="static"
+)
 app.secret_key = "SUPER_SECRET_KEY_CHANGE_THIS"
 
 # ===============================
