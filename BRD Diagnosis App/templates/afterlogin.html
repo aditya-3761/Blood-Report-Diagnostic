@@ -143,6 +143,31 @@
     .login-link a:hover {
       text-decoration: underline;
     }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+
+    .top-bar a {
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 5px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #fff;
+    }
+
+    .history-btn {
+      background: #28a745;
+    }
+
+    .logout-btn {
+      background: #dc3545;
+    }
+    .top-bar a:hover {
+      opacity: 0.9;
+    }
 
     /* Responsive media query code for mobile devices */
     @media (max-width: 768px) {
@@ -160,6 +185,12 @@
 </head>
 <body>
   <div class="container">
+      <!-- 🔝 TOP BAR -->
+  <div class="top-bar">
+    <a href="{{ url_for('view_history') }}" class="history-btn">View History</a>
+    <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+  </div>
+
     <!-- Title section -->
     <div class="title">Blood Report Disease Detection</div>
     <div class="content">
