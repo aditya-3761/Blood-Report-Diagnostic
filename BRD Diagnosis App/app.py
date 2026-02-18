@@ -11,8 +11,6 @@ from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 from reportlab.lib import colors
 import io
 
-from flask import Flask
-
 app = Flask(
     __name__,
     template_folder="templates",
