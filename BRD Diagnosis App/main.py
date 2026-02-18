@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, send_file
 from werkzeug.security import generate_password_hash, check_password_hash
 from pymongo import MongoClient
 from bson.objectid import ObjectId
@@ -6,6 +6,10 @@ import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from datetime import datetime
 import os
+from reportlab.lib.pagesizes import A4
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.lib import colors
+import io
 
 app = Flask(__name__)
 app.secret_key = "SUPER_SECRET_KEY_CHANGE_THIS"
@@ -165,14 +169,18 @@ def view_history():
     if "user_id" not in session:
         return redirect(url_for("login"))
 
-    history = list(history_collection.find(
-        {"user_id": session["user_id"]}
-    ).sort("created_at", -1))
+    history = list(
+        history_collection.find(
+            {"user_id": session["user_id"]}
+        ).sort("created_at", -1)
+    )
 
-    for r in history:
-        r["id"] = str(r["_id"])
+    for record in history:
+        record["id"] = str(record["_id"])   # ✅ FIX
+        record["created_at"] = record["created_at"].strftime("%Y-%m-%d %H:%M")
 
     return render_template("history.html", history=history)
+
 
 
 # ===============================
@@ -185,6 +193,58 @@ def delete_history(record_id):
         "user_id": session["user_id"]
     })
     return redirect(url_for("view_history"))
+
+# ===============================
+# Download History
+# ===============================
+@app.route("/download_history")
+def download_history():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    history = list(
+        history_collection.find(
+            {"user_id": session["user_id"]}
+        ).sort("created_at", -1)
+    )
+
+    if not history:
+        return redirect(url_for("view_history"))
+
+    buffer = io.BytesIO()
+    pdf = SimpleDocTemplate(buffer, pagesize=A4)
+
+    table_data = [
+        ["Date", "WBC", "RBC", "HGB", "PLT", "Disease"]
+    ]
+
+    for r in history:
+        table_data.append([
+            r["created_at"].strftime("%Y-%m-%d %H:%M"),
+            r["WBC"],
+            r["RBC"],
+            r["HGB"],
+            r["PLT"],
+            r["disease_name"]
+        ])
+
+    table = Table(table_data)
+    table.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), colors.grey),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
+        ("GRID", (0, 0), (-1, -1), 1, colors.black),
+    ]))
+
+    pdf.build([table])
+    buffer.seek(0)
+
+    return send_file(
+        buffer,
+        as_attachment=True,
+        download_name="blood_test_history.pdf",
+        mimetype="application/pdf"
+    )
+
 
 # ===============================
 # Logout
