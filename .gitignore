@@ -27,3 +27,9 @@ Thumbs.db
 venv/
 __pycache__/
 *.db
+*.crdownload
+*.pdf
+*.csv
+venv/
+__pycache__/
+
